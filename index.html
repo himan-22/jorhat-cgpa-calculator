@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jorhat Engineering College - CGPA Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.4rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        header h2 {
+            font-size: 1.4rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 2.5rem;
+        }
+        
+        .intro {
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            color: #555;
+            font-size: 1.05rem;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+        
+        .formula-section {
+            background-color: #f8f9fa;
+            padding: 1.8rem;
+            border-radius: 10px;
+            margin-bottom: 2.5rem;
+            border: 1px solid #e9ecef;
+        }
+        
+        .formula-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.2rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .formula-section h3 i {
+            margin-right: 12px;
+            color: var(--secondary-color);
+        }
+        
+        .formula-box {
+            background-color: white;
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin-top: 1.2rem;
+            border-left: 4px solid var(--secondary-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+        
+        .formula {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+        
+        .formula-explanation {
+            margin-top: 0.8rem;
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .calculator-form {
+            margin-top: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            color: var(--dark-color);
+            font-size: 1.05rem;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e3e7;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: white;
+            color: var(--dark-color);
+        }
+        
+        select:focus, input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15);
+            outline: none;
+        }
+        
+        .semester-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.8rem;
+            margin-top: 1.8rem;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 2.5rem;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(52, 152, 219, 0.25);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--dark-color);
+            border: 2px solid #e0e3e7;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+            border-color: #d0d5db;
+        }
+        
+        .btn i {
+            margin-right: 10px;
+        }
+        
+        #result {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            display: none;
+            animation: slideUp 0.5s ease-out;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9ecef;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .result-header h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .cgpa-display {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .cgpa-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            position: relative;
+            display: inline-block;
+            margin: 0 auto;
+        }
+        
+        .cgpa-value::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            border-radius: 4px;
+        }
+        
+        .result-details {
+            margin-top: 2rem;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f3f5;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .result-value {
+            font-weight: 600;
+        }
+        
+        .breakdown {
+            margin-top: 2rem;
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .breakdown-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: #6c757d;
+            font-size: 0.95rem;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .developer-info {
+            margin-top: 1rem;
+            color: #495057;
+        }
+        
+        .copyright {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 6px;
+            cursor: pointer;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 220px;
+            background-color: var(--dark-color);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+            font-weight: normal;
+            line-height: 1.5;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 50px;
+            height: 50px;
+            margin: 30px auto;
+            border: 5px solid rgba(0, 0, 0, 0.05);
+            border-radius: 50%;
+            border-top: 5px solid var(--secondary-color);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 1.5rem;
+            }
+            
+            header {
+                padding: 2rem 1.5rem;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            header h2 {
+                font-size: 1.2rem;
+            }
+            
+            .content {
+                padding: 2rem 1.5rem;
+            }
+            
+            .semester-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            #result {
+                padding: 1.5rem;
+            }
+            
+            .cgpa-value {
+                font-size: 3rem;
+            }
+        }
+        
+        /* Animation for input fields */
+        @keyframes inputFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .sgpa-input {
+            animation: inputFadeIn 0.4s ease-out forwards;
+            opacity: 0;
+        }
+        
+        /* Error message styling */
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #f5c6cb;
+            display: flex;
+            align-items: center;
+            animation: shake 0.5s;
+        }
+        
+        .error-message i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Jorhat Engineering College</h1>
+            <h2>CGPA Calculator</h2>
+        </header>
+        
+        <div class="content">
+            <div class="intro">
+                <p>This advanced CGPA calculator helps students of Jorhat Engineering College accurately compute their Cumulative Grade Point Average based on semester performance. Select your branch, current semester, and enter your SGPA values to get instant results with detailed calculation breakdown.</p>
+            </div>
+            
+            <div class="formula-section">
+                <h3><i class="fas fa-square-root-alt"></i> SGPA Formula</h3>
+                <div class="formula-box">
+                    <div class="formula">SGPA = ∑(Grade Points × Credit Hours) / Total Credit Hours</div>
+                    <div class="formula-explanation">
+                        Where:<br>
+                        • Grade Points = Points earned in each course (0-10 scale)<br>
+                        • Credit Hours = Weightage assigned to each course<br>
+                        • Summation is done over all courses in the semester
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 2rem;"><i class="fas fa-calculator"></i> CGPA Formula</h3>
+                <div class="formula-box">
+                    <div class="formula">CGPA = ∑(SGPA × Semester Credits) / Total Credits</div>
+                    <div class="formula-explanation">
+                        Where:<br>
+                        • SGPA = Semester Grade Point Average for each completed semester<br>
+                        • Semester Credits = Total credit hours for that semester<br>
+                        • Total Credits = Sum of all semester credits completed
+                    </div>
+                </div>
+            </div>
+            
+            <div class="calculator-form">
+                <h3><i class="fas fa-cogs"></i> Calculate Your CGPA</h3>
+                
+                <div id="error-message" class="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="error-text"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="branch">Select Branch <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltiptext">Choose your engineering discipline from the list</span></span></label>
+                    <select id="branch">
+                        <option value="">Select your branch</option>
+                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                        <option value="Electrical Engineering">Electrical Engineering</option>
+                        <option value="Computer Science Engineering">Computer Science Engineering</option>
+                        <option value="Civil Engineering">Civil Engineering</option>
+                        <option value="Instrumentation Engineering">Instrumentation Engineering</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="semester">Current Semester <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltiptext">Select your most recently completed academic semester</span></span></label>
+                    <select id="semester">
+                        <option value="">Select your semester</option>
+                        <option value="1">1st Semester</option>
+                        <option value="2">2nd Semester</option>
+                        <option value="3">3rd Semester</option>
+                        <option value="4">4th Semester</option>
+                        <option value="5">5th Semester</option>
+                        <option value="6">6th Semester</option>
+                        <option value="7">7th Semester</option>
+                        <option value="8">8th Semester</option>
+                    </select>
+                </div>
+                
+                <div id="sgpa-inputs" class="semester-inputs">
+                    <!-- Semester inputs will be generated here -->
+                </div>
+                
+                <div class="buttons">
+                    <button id="calculate" class="btn btn-primary"><i class="fas fa-calculator"></i> Calculate CGPA</button>
+                    <button id="reset" class="btn btn-secondary"><i class="fas fa-eraser"></i> Reset Form</button>
+                </div>
+                
+                <div id="spinner" class="spinner"></div>
+                
+                <div id="result">
+                    <div class="result-header">
+                        <h3><i class="fas fa-poll"></i> CGPA Result</h3>
+                    </div>
+                    
+                    <div class="cgpa-display">
+                        <div class="cgpa-value" id="cgpa-result">0.00</div>
+                    </div>
+                    
+                    <div class="result-details">
+                        <div class="result-item">
+                            <span class="result-label">Branch:</span>
+                            <span class="result-value" id="result-branch"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Semesters Completed:</span>
+                            <span class="result-value" id="result-semesters"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Total Credits:</span>
+                            <span class="result-value" id="total-credits">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="breakdown">
+                        <div class="breakdown-title"><i class="fas fa-calculator"></i> Calculation Breakdown</div>
+                        <div id="calculation-breakdown"></div>
+                        <div id="final-calculation" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed #dee2e6;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="developer-info">
+                Developed by Himan Dutta | 6th Semester, Instrumentation Engineering, JEC
+            </div>
+            <div class="copyright">
+                © 2025 - All Rights Reserved
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Advanced CGPA Calculator with enhanced features
+        
+        // Credit values for each semester (can be customized per branch if needed)
+        const semesterCredits = {
+            "1": 18,
+            "2": 20,
+            "3": 23.5,
+            "4": 22,
+            "5": 21,
+            "6": 22,
+            "7": 20,
+            "8": 18
+        };
+        
+        // DOM elements
+        const branchSelect = document.getElementById('branch');
+        const semesterSelect = document.getElementById('semester');
+        const sgpaInputsContainer = document.getElementById('sgpa-inputs');
+        const calculateBtn = document.getElementById('calculate');
+        const resetBtn = document.getElementById('reset');
+        const resultDiv = document.getElementById('result');
+        const cgpaResult = document.getElementById('cgpa-result');
+        const totalCreditsSpan = document.getElementById('total-credits');
+        const calculationBreakdown = document.getElementById('calculation-breakdown');
+        const finalCalculation = document.getElementById('final-calculation');
+        const spinner = document.getElementById('spinner');
+        const errorMessage = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+        const resultBranch = document.getElementById('result-branch');
+        const resultSemesters = document.getElementById('result-semesters');
+        
+        // Generate SGPA input fields based on selected semester
+        semesterSelect.addEventListener('change', function() {
+            const selectedSemester = this.value;
+            sgpaInputsContainer.innerHTML = '';
+            
+            if (selectedSemester) {
+                for (let i = 1; i <= parseInt(selectedSemester); i++) {
+                    const div = document.createElement('div');
+                    div.className = 'form-group';
+                    div.innerHTML = `
+                        <label for="semester-${i}">Semester ${i} SGPA <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltiptext">Enter your SGPA for semester ${i} (0-10 scale)</span></span></label>
+                        <input type="number" id="semester-${i}" min="0" max="10" step="0.01" placeholder="Enter SGPA" class="sgpa-input">
+                    `;
+                    sgpaInputsContainer.appendChild(div);
+                }
+                
+                // Animate the input fields
+                const inputs = document.querySelectorAll('.sgpa-input');
+                inputs.forEach((input, index) => {
+                    setTimeout(() => {
+                        input.style.opacity = '1';
+                        input.style.transform = 'translateY(0)';
+                    }, index * 100);
+                    input.style.opacity = '0';
+                    input.style.transform = 'translateY(10px)';
+                    input.style.transition = 'all 0.4s ease-out';
+                });
+            }
+        });
+        
+        // Calculate CGPA with enhanced validation and UX
+        calculateBtn.addEventListener('click', function() {
+            const selectedSemester = semesterSelect.value;
+            const selectedBranch = branchSelect.value;
+            
+            // Hide previous error message
+            errorMessage.style.display = 'none';
+            
+            // Validate inputs
+            if (!selectedBranch) {
+                showError('Please select your engineering branch');
+                branchSelect.focus();
+                return;
+            }
+            
+            if (!selectedSemester) {
+                showError('Please select your current semester');
+                semesterSelect.focus();
+                return;
+            }
+            
+            // Validate all SGPA inputs
+            let isValid = true;
+            let totalPoints = 0;
+            let totalCreditsValue = 0;
+            let breakdownHTML = '';
+            
+            // Show loading spinner
+            spinner.style.display = 'block';
+            resultDiv.style.display = 'none';
+            
+            // Simulate calculation delay for better UX
+            setTimeout(() => {
+                for (let i = 1; i <= parseInt(selectedSemester); i++) {
+                    const sgpaInput = document.getElementById(`semester-${i}`);
+                    const sgpaValue = sgpaInput.value.trim();
+                    
+                    if (sgpaValue === '') {
+                        showError(`Please enter SGPA for Semester ${i}`);
+                        sgpaInput.focus();
+                        isValid = false;
+                        break;
+                    }
+                    
+                    const sgpa = parseFloat(sgpaValue);
+                    
+                    if (isNaN(sgpa)) {
+                        showError(`Invalid SGPA value for Semester ${i}`);
+                        sgpaInput.focus();
+                        isValid = false;
+                        break;
+                    }
+                    
+                    if (sgpa < 0 || sgpa > 10) {
+                        showError(`SGPA for Semester ${i} must be between 0 and 10`);
+                        sgpaInput.focus();
+                        isValid = false;
+                        break;
+                    }
+                    
+                    const credits = semesterCredits[i];
+                    const semesterPoints = sgpa * credits;
+                    
+                    totalPoints += semesterPoints;
+                    totalCreditsValue += credits;
+                    
+                    breakdownHTML += `
+                        <div class="breakdown-item">
+                            <span>Semester ${i}:</span>
+                            <span>${sgpa.toFixed(2)} × ${credits} = ${semesterPoints.toFixed(2)}</span>
+                        </div>
+                    `;
+                }
+                
+                if (isValid) {
+                    const cgpa = totalPoints / totalCreditsValue;
+                    
+                    // Display results with enhanced formatting
+                    cgpaResult.textContent = cgpa.toFixed(2);
+                    totalCreditsSpan.textContent = totalCreditsValue;
+                    resultBranch.textContent = selectedBranch;
+                    resultSemesters.textContent = selectedSemester;
+                    
+                    calculationBreakdown.innerHTML = breakdownHTML;
+                    finalCalculation.innerHTML = `
+                        <div class="breakdown-item" style="font-weight: 600;">
+                            <span>Total Points:</span>
+                            <span>${totalPoints.toFixed(2)}</span>
+                        </div>
+                        <div class="breakdown-item" style="font-weight: 600;">
+                            <span>Total Credits:</span>
+                            <span>${totalCreditsValue}</span>
+                        </div>
+                        <div class="breakdown-item" style="font-weight: 600; color: var(--primary-color);">
+                            <span>CGPA:</span>
+                            <span>${totalPoints.toFixed(2)} ÷ ${totalCreditsValue} = ${cgpa.toFixed(2)}</span>
+                        </div>
+                    `;
+                    
+                    // Set color based on CGPA performance
+                    if (cgpa >= 8.5) {
+                        cgpaResult.style.color = 'var(--success-color)';
+                    } else if (cgpa >= 7.0) {
+                        cgpaResult.style.color = 'var(--secondary-color)';
+                    } else if (cgpa >= 5.0) {
+                        cgpaResult.style.color = 'var(--warning-color)';
+                    } else {
+                        cgpaResult.style.color = 'var(--danger-color)';
+                    }
+                    
+                    spinner.style.display = 'none';
+                    resultDiv.style.display = 'block';
+                    
+                    // Smooth scroll to results
+                    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    spinner.style.display = 'none';
+                }
+            }, 800);
+        });
+        
+        // Reset form with animation
+        resetBtn.addEventListener('click', function() {
+            branchSelect.value = '';
+            semesterSelect.value = '';
+            sgpaInputsContainer.innerHTML = '';
+            resultDiv.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            // Reset animation
+            branchSelect.style.animation = 'none';
+            semesterSelect.style.animation = 'none';
+            setTimeout(() => {
+                branchSelect.style.animation = 'fadeIn 0.5s';
+                semesterSelect.style.animation = 'fadeIn 0.5s';
+            }, 10);
+        });
+        
+        // Show error message with animation
+        function showError(message) {
+            spinner.style.display = 'none';
+            errorText.textContent = message;
+            errorMessage.style.display = 'flex';
+            errorMessage.style.animation = 'shake 0.5s';
+            
+            // Scroll to error message
+            errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Remove shake animation after it completes
+            setTimeout(() => {
+                errorMessage.style.animation = '';
+            }, 500);
+        }
+    </script>
+</body>
+</html>
