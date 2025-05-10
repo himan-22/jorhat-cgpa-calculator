@@ -251,10 +251,14 @@
         .cgpa-value {
             font-size: 3.5rem;
             font-weight: 700;
-            color: var(--primary-color);
             position: relative;
             display: inline-block;
             margin: 0 auto;
+            text-shadow: 2px 2px 5px rgb(0, 0, 0);
+            animation: glow 2s infinite alternate;
+            transform-style: preserve-3d;
+            perspective: 500px;
+            
         }
         
         .cgpa-value::after {
@@ -459,11 +463,7 @@
             font-size: 1.2rem;
         }
         
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
+        
     </style>
 </head>
 <body>
@@ -592,7 +592,8 @@
     </div>
     
     <script>
-        // Advanced CGPA Calculator with enhanced features
+      
+
         
         // Credit values for each semester (can be customized per branch if needed)
         const semesterCredits = {
@@ -806,6 +807,8 @@
                 errorMessage.style.animation = '';
             }, 500);
         }
+
+        
     </script>
 </body>
 </html>
